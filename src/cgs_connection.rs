@@ -16,6 +16,17 @@ unsafe extern "C" {
     unsafe fn CGSSetLoginwindowConnection(cid: CGSConnectionID) -> CGError;
     unsafe fn CGSDisableUpdate(cid: CGSConnectionID) -> CGError;
     unsafe fn CGSReenableUpdate(cid: CGSConnectionID) -> CGError;
+    unsafe fn CGSRegisterForNewConnectionNotification(
+        proc: CGSNewConnectionNotificationProc,
+    ) -> CGError;
+    unsafe fn CGSRemoveNewConnectionNotification(proc: CGSNewConnectionNotificationProc)
+    -> CGError;
+    unsafe fn CGSRegisterForConnectionDeathNotification(
+        proc: CGSConnectionDeathNotificationProc,
+    ) -> CGError;
+    unsafe fn CGSRemoveConnectionDeathNotification(
+        proc: CGSConnectionDeathNotificationProc,
+    ) -> CGError;
 }
 
 /// DOCUMENTATION PENDING - verify this is Leopard only!
@@ -35,6 +46,26 @@ pub fn reenable_update(cid: CGSConnectionID) -> CGError {
 /// Is there a menubar associated with this connection?
 pub fn menu_bar_exists(cid: CGSConnectionID) -> bool {
     unsafe { CGSMenuBarExists(cid) }
+}
+
+/// Registers or removes a function to get notified when a connection is created. Only gets notified for connections created in the current application.
+type CGSNewConnectionNotificationProc = unsafe extern "C" fn(cid: CGSConnectionID);
+pub fn new_connection_notification_proc(proc: CGSNewConnectionNotificationProc) -> CGError {
+    unsafe { CGSRegisterForNewConnectionNotification(proc) }
+}
+pub fn remove_new_connection_notification(proc: CGSNewConnectionNotificationProc) -> CGError {
+    unsafe { CGSRemoveNewConnectionNotification(proc) }
+}
+
+/// Registers or removes a function to get notified when a connection is released. Only gets notified for connections created in the current application.
+type CGSConnectionDeathNotificationProc = unsafe extern "C" fn(cid: CGSConnectionID);
+pub fn register_for_connection_death_notification(
+    proc: CGSConnectionDeathNotificationProc,
+) -> CGError {
+    unsafe { CGSRegisterForConnectionDeathNotification(proc) }
+}
+pub fn remove_connection_death_notification(proc: CGSConnectionDeathNotificationProc) -> CGError {
+    unsafe { CGSRemoveConnectionDeathNotification(proc) }
 }
 
 /// Gets the default connection for this process. `CGSMainConnectionID` is just a more modern name. */
