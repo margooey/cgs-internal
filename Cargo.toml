@@ -8,3 +8,9 @@ description = "rust bindings for CGSInternal (private CoreGraphics routines)"
 [dependencies]
 core-foundation = "0.10.1"
 libc = "0.2.180"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-apple-darwin", "aarch64-apple-darwin"]
+
+[features]
+default = ["link"]
