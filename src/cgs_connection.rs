@@ -52,7 +52,7 @@ pub type pid_t = libc::pid_t;
 pub const kCGSNullConnectionID: CGSConnectionID = 0;
 
 #[cfg(target_os = "macos")]
-#[cfg_attr(feature = "link", link(name = "ApplicationServices", kind = "framework"))]
+#[link(name = "ApplicationServices", kind = "framework")]
 unsafe extern "C" {
     unsafe fn CGSMainConnectionID() -> CGSConnectionID;
     unsafe fn CGSNewConnection(unused: i32, outConnection: *mut CGSConnectionID) -> CGError;
